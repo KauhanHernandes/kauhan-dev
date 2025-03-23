@@ -208,7 +208,7 @@ function App() {
             <div className="md:hidden">
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-300 hover:text-white"
+                className="text-cyan-400 hover:text-cyan"
               >
                 <AlignJustify size={22} /> 
               </button>
@@ -317,7 +317,6 @@ function App() {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1 }}
                   >
-                    <ChevronDown size={24} className="text-cyan-400" />
                   </motion.div>
                 </motion.div>
 
