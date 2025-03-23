@@ -1,9 +1,10 @@
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useKeenSlider } from 'keen-slider/react';
 import { Github, Linkedin, Mail, Home, User, FolderGit2, MessageSquare, Code, ExternalLink, Globe, Link2, Terminal, ChevronDown } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
+import ReCAPTCHA from 'react-google-recaptcha';
 import 'keen-slider/keen-slider.min.css';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80';
@@ -19,16 +20,16 @@ const projects = [
   {
     title: 'Meu Portfílio',
     description: 'Meu portfólio pessoal.',
-    image: 'src/assets/images/porflio.png',
+    image: '/imgs/home/porflio.png',
     tech: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'HTML/CSS/JavaScript', 'EmailJs'],
-    link: 'https://sistema-cadastramento.vercel.app/',
+    link: 'https://kauhan-dev.vercel.app/',
     github: '#',
-    preview: 'https://sistema-cadastramento.vercel.app/'
+    preview: 'https://kauhan-dev.vercel.app/'
   },
   {
     title: 'Portfólio Nutricionista',
     description: 'Este é um projeto de site pessoal para a nutricionista Maria Evellyn, destacando suas especializações em nutrição materno-infantil, terapia alimentar e nutrição escolar.',
-    image: 'src/assets/images/nutri1.png',
+    image: '/imgs/home/nutri1.png',
     tech: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'HTML/CSS/JavaScript', 'Aos'],
     link: 'https://nutrievellyn.vercel.app/',
     github: '#',
@@ -37,13 +38,12 @@ const projects = [
   {
     title: 'Sistema de cadastramento',
     description: 'Aplicação Web para cadastramento de empresas com todas as informações possíveis.',
-    image: 'src/assets/images/cadastr.png',
+    image: '/imgs/home/cadastr.png',
     tech: ['TypeScript', 'React', 'Vite', 'Tailwind CSS', 'HTML/CSS/JavaScript'],
     link: 'https://sistema-cadastramento.vercel.app/',
     github: '#',
     preview: 'https://sistema-cadastramento.vercel.app/'
   },
-  
 ];
 
 const skills = {
@@ -74,6 +74,12 @@ const skills = {
   ]
 };
 
+interface ContactForm {
+  name: string;
+  email: string;
+  message: string;
+}
+
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -91,16 +97,11 @@ const TypewriterText = ({ text }: { text: string }) => {
   return <span>{displayText}</span>;
 };
 
-interface ContactForm {
-  name: string;
-  email: string;
-  message: string;
-}
-
 function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [formData, setFormData] = useState<ContactForm>({
     name: '',
     email: '',
@@ -124,6 +125,13 @@ function App() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    
+    const recaptchaValue = recaptchaRef.current?.getValue();
+    if (!recaptchaValue) {
+      toast.error('Por favor, complete o captcha');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -134,7 +142,8 @@ function App() {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
-          to_email: 'kauhanhernandes@gmail.com'
+          to_email: 'kauhanhernandes@gmail.com',
+          'g-recaptcha-response': recaptchaValue,
         },
         'YOUR_PUBLIC_KEY'
       );
@@ -142,6 +151,7 @@ function App() {
       if (result.status === 200) {
         toast.success('Mensagem enviada com sucesso!');
         setFormData({ name: '', email: '', message: '' });
+        recaptchaRef.current?.reset();
       }
     } catch (error) {
       toast.error('Erro ao enviar mensagem. Tente novamente.');
@@ -161,7 +171,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
-      <Toaster position="top-right" />
       <nav className="fixed top-0 w-full bg-gray-900/90 backdrop-blur-sm z-50 border-b border-gray-800">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -337,7 +346,7 @@ function App() {
                       transition={{ duration: 2, repeat: Infinity }}
                     />
                     <img
-                      src="src/assets/images/avatar.jpg"
+                      src="/imgs/home/avatar.jpg"
                       alt="Profile"
                       className="relative rounded-full w-full h-full object-cover border-4 border-cyan-400"
                     />
@@ -358,7 +367,7 @@ function App() {
                     Estou em busca de oportunidades que me permitam crescer profissionalmente, ganhando experiência prática e desenvolvendo minhas habilidades. Se você precisa de alguém motivado e comprometido, estou à disposição para colaborar em seu projeto.
                     </p>
                     <motion.a 
-                      href="" 
+                      href="/imgs/curriculum/Curriculo Kauhan Hernandes.pdf" 
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-6 px-6 py-3 bg-cyan-500 hover:bg-cyan-600 rounded-lg inline-flex items-center gap-2 transition-colors"
@@ -469,6 +478,7 @@ function App() {
 
             {activeTab === 'contact' && (
               <div className="max-w-2xl mx-auto space-y-8">
+                <Toaster position="top-right" />
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -494,6 +504,8 @@ function App() {
                       className="w-full bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
                       placeholder="Seu nome completo"
                       required
+                      pattern="[A-Za-zÀ-ÖØ-öø-ÿ\s]{2,}"
+                      title="Por favor, insira um nome válido (apenas letras e espaços)"
                     />
                   </div>
                   <div>
@@ -506,6 +518,8 @@ function App() {
                       className="w-full bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
                       placeholder="seu@email.com"
                       required
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                      title="Por favor, insira um email válido"
                     />
                   </div>
                   <div>
@@ -518,7 +532,16 @@ function App() {
                       className="w-full bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all"
                       placeholder="Sua mensagem aqui..."
                       required
+                      minLength={10}
+                      maxLength={1000}
                     ></textarea>
+                  </div>
+                  <div className="flex justify-center">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey="YOUR_RECAPTCHA_SITE_KEY"
+                      theme="dark"
+                    />
                   </div>
                   <motion.button
                     type="submit"
