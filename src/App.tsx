@@ -539,7 +539,7 @@ function App() {
                   <div className="flex justify-center">
                     <ReCAPTCHA
                       ref={recaptchaRef}
-                      sitekey="YOUR_RECAPTCHA_SITE_KEY"
+                      sitekey="6LfdOP0qAAAAAMhwOC6fpILAFlEy1Ji1lncgsjnf"
                       theme="dark"
                     />
                   </div>
