@@ -6,6 +6,9 @@ import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'keen-slider/keen-slider.min.css';
+import { AlignJustify } from 'lucide-react';
+
+
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1172&q=80';
 
@@ -207,7 +210,7 @@ function App() {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-gray-300 hover:text-white"
               >
-                <Code size={24} />
+                <AlignJustify size={22} /> 
               </button>
             </div>
           </div>
