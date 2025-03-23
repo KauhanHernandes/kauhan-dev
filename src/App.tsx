@@ -136,7 +136,7 @@ function App() {
 
     try {
       const result = await emailjs.send(
-        'service_rgziltb',
+        'service_auvjtef',
         'template_ih36ho8',
         {
           from_name: formData.name,
@@ -145,7 +145,7 @@ function App() {
           to_email: 'kauhanhernandes@gmail.com',
           'g-recaptcha-response': recaptchaValue,
         },
-        'QksakU89JBR51m0Hf'
+        'el4ZwZ0FP5UayapwI'
       );
 
       if (result.status === 200) {
