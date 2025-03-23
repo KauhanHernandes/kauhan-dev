@@ -136,7 +136,7 @@ function App() {
 
     try {
       const result = await emailjs.send(
-        'YOUR_SERVICE_ID',
+        'service_rgziltb',
         'YOUR_TEMPLATE_ID',
         {
           from_name: formData.name,
@@ -145,7 +145,7 @@ function App() {
           to_email: 'kauhanhernandes@gmail.com',
           'g-recaptcha-response': recaptchaValue,
         },
-        'YOUR_PUBLIC_KEY'
+        'QksakU89JBR51m0Hf'
       );
 
       if (result.status === 200) {
