@@ -137,7 +137,7 @@ function App() {
     try {
       const result = await emailjs.send(
         'service_rgziltb',
-        'YOUR_TEMPLATE_ID',
+        'template_ih36ho8',
         {
           from_name: formData.name,
           from_email: formData.email,
