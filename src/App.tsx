@@ -1,12 +1,12 @@
 import React, { useState, useEffect, FormEvent, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useKeenSlider } from 'keen-slider/react';
-import { Github, Linkedin, Mail, Home, User, FolderGit2, MessageSquare, Code, ExternalLink, Globe, Link2, Terminal, ChevronDown } from 'lucide-react';
+import { Github, Linkedin, Mail, Home, User, FolderGit2, MessageSquare, AlignJustify, ExternalLink, Globe, Link2, Terminal, ChevronDown } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import toast, { Toaster } from 'react-hot-toast';
 import ReCAPTCHA from 'react-google-recaptcha';
 import 'keen-slider/keen-slider.min.css';
-import { AlignJustify } from 'lucide-react';
+
 
 
 
